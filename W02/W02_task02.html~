@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>W02: Task 02</title>
+  </head>
+  <body>
+    <script src="vec3.js"></script>
+    <form name="js">
+      vertex1:<input type="text" name="X1" value=""><input type="text" name="Y1" value=""><input type="text" name="Z1" value=""><br>
+      vertex2:<input type="text" name="X2" value=""><input type="text" name="Y2" value=""><input type="text" name="Z2" value=""><br>
+      vertex3:<input type="text" name="X3" value=""><input type="text" name="Y3" value=""><input type="text" name="Z3" value=""><br>
+    <script>
+    </script>
+  </body>
+</html>
