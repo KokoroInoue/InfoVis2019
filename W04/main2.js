@@ -18,9 +18,13 @@ function main()
     document.body.appendChild( renderer.domElement );
 
     var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+    var material = new THREE.MeshLambertMaterial( { color: 191970 } );
     var cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
+
+    var light = new THREE.PointLight(0xFFFFFF);
+    light.position.set(1, 1, 1);
+    scene.add(light);
 
     loop();
 
@@ -30,5 +34,6 @@ function main()
         cube.rotation.x += 0.001;
         cube.rotation.y += 0.001;
         renderer.render( scene, camera );
+	light.position.set(1, 1, 1);
     }
 }
