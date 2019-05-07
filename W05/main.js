@@ -10,7 +10,7 @@ function main(){
     var near = 1;
     var far = 1000;
     var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-    camera.position.set( 0, 0, 5 );
+    camera.position.set( 0.5, 0.5, 5 );
     scene.add( camera );
 
     var renderer = new THREE.WebGLRenderer();
@@ -28,8 +28,8 @@ function main(){
     geometry.vertices.push(new THREE.Vector3(1, 1, 1));
     geometry.vertices.push(new THREE.Vector3(0, 1, 1));
 
-    geometry.faces.push(new THREE.Face3( 0, 3, 1));
-    geometry.faces.push(new THREE.Face3( 2, 1, 3));
+    geometry.faces.push(new THREE.Face3( 0, 1, 3));
+    geometry.faces.push(new THREE.Face3( 2, 3, 1));
     geometry.faces.push(new THREE.Face3( 4, 0, 7));
     geometry.faces.push(new THREE.Face3( 3, 7, 0));
     geometry.faces.push(new THREE.Face3( 7, 3, 6));
@@ -49,17 +49,29 @@ function main(){
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    var light = new THREE.PointLight( 0xffffff );
-    light.position.set( 2, 2, 2 );
-    scene.add( light );
+    //var light1 = new THREE.PointLight( 0xffffff );
+    //light1.position.set( -1, -1, -1 );
+    //scene.add( light1 );
+
+    //var light2 = new THREE.PointLight( 0xffffff,0.3 );
+    //light2.position.set( -1, -1, -1 );
+    //scene.add( light2 );
+    
+    const light3 = new THREE.DirectionalLight(0xFFFFFF, 1);
+    light3.position.set(0.5, 0.5, 3).normalize();
+    scene.add(light3);
+
+    const light4 = new THREE.DirectionalLight(0xFFFFFF, 1);
+    light4.position.set(0.5, 0.5, -2).normalize();
+    scene.add(light4);
     
     loop();
-
+    
     function loop()
     {
         requestAnimationFrame( loop );
-        mesh.rotation.x += 0.001;
-        mesh.rotation.y += 0.001;
+        mesh.rotation.x += 0.01;
+        mesh.rotation.y += 0.01;
         renderer.render( scene, camera );
 	//light.position.set(1, 1, 1);
     }
