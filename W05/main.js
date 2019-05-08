@@ -1,5 +1,7 @@
 function main(){
 
+    document.addEventListener('mousedown', mouse_down_event);
+    
     var width = 500;
     var height = 500;
 
@@ -10,7 +12,7 @@ function main(){
     var near = 1;
     var far = 1000;
     var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-    camera.position.set( 0.5, 0.5, 5 );
+    camera.position.set( 0, 0, 5 );
     scene.add( camera );
 
     var renderer = new THREE.WebGLRenderer();
@@ -49,21 +51,13 @@ function main(){
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    //var light1 = new THREE.PointLight( 0xffffff );
-    //light1.position.set( -1, -1, -1 );
-    //scene.add( light1 );
+    const light1 = new THREE.DirectionalLight(0xFFFFFF, 1);
+    light1.position.set(0.5, 0.5, 3).normalize();
+    scene.add(light1);
 
-    //var light2 = new THREE.PointLight( 0xffffff,0.3 );
-    //light2.position.set( -1, -1, -1 );
-    //scene.add( light2 );
-    
-    const light3 = new THREE.DirectionalLight(0xFFFFFF, 1);
-    light3.position.set(0.5, 0.5, 3).normalize();
-    scene.add(light3);
-
-    const light4 = new THREE.DirectionalLight(0xFFFFFF, 1);
-    light4.position.set(0.5, 0.5, -2).normalize();
-    scene.add(light4);
+    const light2 = new THREE.DirectionalLight(0xFFFFFF, 1);
+    light2.position.set(0.5, 0.5, -2).normalize();
+    scene.add(light2);
     
     loop();
     
@@ -71,11 +65,38 @@ function main(){
     {
         requestAnimationFrame( loop );
         mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.01;
+        //mesh.rotation.y += 0.01;
+	mesh.rotation.z += 0.01;
         renderer.render( scene, camera );
 	//light.position.set(1, 1, 1);
     }
-}
 
-//4.17
-//light¤ÎÊÑ¹¹
+    function mouse_down_event(event){
+	
+	
+	var x_win = event.clientX;
+	var y_win = event.clientY;
+	
+	var vx = renderer.domElement.offsetLeft;
+	var vy = renderer.domElement.offsetTop;
+	var vw = renderer.domElement.width;
+	var vh = renderer.domElement.height;
+	var x_NDC = 2 * ( x_win - vx ) / vw - 1;
+	var y_NDC = -( 2 * ( y_win - vy ) / vh - 1 );
+	
+	var p_NDC = new THREE.Vector3( x_NDC, y_NDC, 1 );
+	var p_wld = p_NDC.unproject( camera );
+    
+	var origin = camera.position;
+	var direction = p_wld;
+	
+	var raycaster = new THREE.Raycaster(origin, direction);
+	var intersects = raycaster.intersectObject(triangle);
+	if(intersects.length > 0){
+	    intersect[0].face.color.setRGB(1, 0, 0);
+	    intersect[0].object.geometry.colorsNeedUpdate = true;
+	}
+	
+	
+    }
+}
