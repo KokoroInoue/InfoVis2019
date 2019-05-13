@@ -54,16 +54,17 @@ function main()
         torus_knot.rotation.y += 0.01;
 	torus_knot_edge.rotation.x += 0.01;
         torus_knot_edge.rotation.y += 0.01;
+
+	var meshFlg = true;
 	
-	renderer.clear();
-	
-	if(edge){
+	if(meshFlg){
 	torus_knot_edge.material.side = THREE.FrontSide;
 	torus_knot.material.uniforms.edgeColor.value = new THREE.Vector4(0, 0, 0, 0);
 	torus_knot.material.uniforms.edge.value = false;
-	renderer.render(scene, camera);
+	    renderer.render(scene, camera);
 	}
-	if(edge){
+	
+	if(meshFlg){
 	torus_knot_edge.material.side = THREE.BackSide;
 	torus_knot_edge.material.uniforms.edgeColor.value = new THREE.Vector4(0, 0, 0, 1);
 	torus_knot_edge.material.uniforms.edge.value = true;

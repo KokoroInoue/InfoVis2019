@@ -23,10 +23,10 @@ function main()
     document.body.appendChild( renderer.domElement );
     
     var geometry = new THREE.TorusKnotGeometry( 1, 0.3, 100, 20 );
-    var material = new THREE.ShaderMaterial({
+    var material = new THREE.MeshToonMaterial({
 	vertexColors: THREE.VertexColors,
-	vertexShader: document.getElementById('gouraud.vert').text,
-	fragmentShader: document.getElementById('gouraud.frag').text,
+	vertexShader: document.getElementById('shader.vert').text,
+	fragmentShader: document.getElementById('shader.frag').text,
 	uniforms: {
 	    light_position: { type: 'v3', value: light.position },
 	    camera_position: {type: 'v3', value: camera.position}

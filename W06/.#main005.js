@@ -1,1 +1,0 @@
-Kokoro@Kokoro-no-iMac.local.13524
