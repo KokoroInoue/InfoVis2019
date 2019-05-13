@@ -34,7 +34,7 @@ function main()
 	uniforms: {
 	    //edgeColor: {type: 'v4', value: new THREE.Vector4(0.0,0.0,0.0,0.0)},
 	    //edge: {type: 'i', value: true},
-	    texture: {type: 't', value: THREE.TextureLoader('https://wgld.org/s/sample_035/toon.png')},	    
+	    //texture: {type: 't', value: THREE.TextureLoader('https://wgld.org/s/sample_035/toon.png')},	    
 	    light_position: { type: 'v3', value: light.position },
 	    camera_position: { type: 'v3', value: camera.position },
 	    //edgeWidthRatio: { type: 'f', value: 0.5}

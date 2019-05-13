@@ -1,6 +1,6 @@
 <html>
     <head>
-	<title>W06: Task04</title>
+	<title>W06: Task05</title>
     </head>
     <body>
 	<script src="https://threejs.org/build/three.min.js"></script>
@@ -23,6 +23,7 @@
 	  varying vec3 normal_vector;
 	  uniform vec3 light_position;
 	  uniform vec3 camera_position;
+	  uniform sample2D texture;
 	  float CalculateBeckmann(float m, float cosbeta){
   	      return (
   		  exp(-(1.0-(cosbeta*cosbeta))/(m*m*cosbeta*cosbeta))/(4.0*m*m*cosbeta*cosbeta*cosbeta*cosbeta)
@@ -56,17 +57,20 @@
 	      return C * ( Ia + Id + Is );
 	  }
 	  void main(){
+	      int levels = 3;
+	      float scaleFactor = 1.0/levels;
 	      vec3 C = point_color;
 	      vec3 L = normalize( light_position - point_position.xyz );
 	      vec3 N = normalize( normal_vector );
 	      vec3 V = normalize( camera_position - point_position.xyz );
 	      vec3 shaded_color = Reflection( C, L, N, V );
-	      
-	      gl_FragColor = vec4( shaded_color, 1.0 );
+	      float diffuse = shaded_color * scaleFactor;
+	      gl_FragColor = 
 	  }
 	</script>
 	
-	<script src="main004.js"></script>
+	
+	<script src="main005.js"></script>
 	<script>
 	  main();
 	</script>
