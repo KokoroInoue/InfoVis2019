@@ -30,7 +30,8 @@ function main( vert_shader, frag_shader, reflection_model, target_dom ){
             Lambert: reflection_model == "Lambert",
             Phong: reflection_model == "Phong",
             BlinnPhong: reflection_model == "BlinnPhong",
-            CookTrrance: reflection_model == "CookTrrance"
+            CookTrrance: reflection_model == "CookTrrance",
+	    Toon: reflection_model == "Toon"
         },
         uniforms: {
             light_position: { type: 'v3', value: light.position },
