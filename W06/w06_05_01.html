@@ -35,15 +35,23 @@
 	      float Ia = ka;
 	      float Id = kd * dd;
 	      float Is = ks * ds;
-	      return C * ( Ia + Id + Is );
+	      //return C * ( Ia + Id + Is );
+	      return C * ( Ia + Id );
 	  }
 	  void main(){
-	      vec3 C = point_color;
-	      vec3 L = normalize( light_position - point_position.xyz );
-	      vec3 N = normalize( normal_vector );
-	      vec3 V = normalize( camera_position - point_position.xyz );
-	      vec3 shaded_color = shaderReflection( C, L, N, V );
-	      gl_FragColor = vec4( shaded_color, 1.0 );
+	   float itensity;
+	   vec3 C = point_color;
+	   vec3 L = normalize( light_position - point_position.xyz );
+	   vec3 N = normalize( normal_vector );
+	   vec3 V = normalize( camera_position - point_position.xyz );
+	   vec3 shaded_color = shaderReflection( C, L, N, V );
+	   float intensity = normalize(dot(L, N));
+	   float intensity_cp = intensity;
+	   if(intensity > 0.9)intensity_cp = 1.0;
+	   else if(intensity > 0.5)intensity_cp = 0.75;
+	   else if(intensity > 0.25)intensity_cp = 0.5;
+	   else intensity_cp = 0.25;
+	   gl_FragColor = vec4( shaded_color*intensity_cp, 1.0 );
 	  }
 	</script>
 	

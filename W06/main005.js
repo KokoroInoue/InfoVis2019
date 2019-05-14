@@ -31,13 +31,9 @@ function main()
 	vertexColors: THREE.VertexColors,
 	vertexShader: document.getElementById('shader.vert').text,
 	fragmentShader: document.getElementById('shader.frag').text,
-	uniforms: {
-	    //edgeColor: {type: 'v4', value: new THREE.Vector4(0.0,0.0,0.0,0.0)},
-	    //edge: {type: 'i', value: true},
-	    texture: {type: 't', value: THREE.TextureLoader('https://wgld.org/s/sample_035/toon.png')},	    
+	uniforms: {   
 	    light_position: { type: 'v3', value: light.position },
-	    camera_position: { type: 'v3', value: camera.position },
-	    //edgeWidthRatio: { type: 'f', value: 0.5}
+	    camera_position: { type: 'v3', value: camera.position }
 	}
     });
     
