@@ -241,10 +241,10 @@
 	      float Is = ks * ds;
 	      float intensity = normalize(dot(L, N));
 	      float intensity_cp = intensity;
-	      if(intensity > 0.9)intensity_cp = 1.0;
-	      else if(intensity > 0.5)intensity_cp = 0.75;
-	      else if(intensity > 0.25)intensity_cp = 0.5;
-	      else intensity_cp = 0.25;
+	      if(intensity > 0.75)intensity_cp = 0.875;
+	      else if(intensity > 0.5)intensity_cp = 0.625;
+	      else if(intensity > 0.25)intensity_cp = 0.375;
+	      else intensity_cp = 0.125;
 	      //return C * ( Ia + Id + Is ) * intensity_cp;
 	      return C * ( Ia + Id ) * intensity_cp;
 	  }	    
