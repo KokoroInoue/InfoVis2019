@@ -164,7 +164,6 @@ THREE.Lut.prototype = {
 		len = data.length;
 
 		this.map = THREE.ColorMapKeywords[ this.mapname ];
-<<<<<<< HEAD
 
 		var k = 0;
 
@@ -172,15 +171,6 @@ THREE.Lut.prototype = {
 
 		for ( var i = 1; i >= 0; i -= step ) {
 
-=======
-	    
-	    var k = 0;
-	    
-	    var step = 1.0 / this.n;
-	    
-	    for ( var i = 1; i >= 0; i -= step ) {
-		
->>>>>>> 0bddc75219b862288cd9922c54b064c2ee029e7c
 			for ( var j = this.map.length - 1; j >= 0; j -- ) {
 
 				if ( i < this.map[ j ][ 0 ] && i >= this.map[ j - 1 ][ 0 ]  ) {

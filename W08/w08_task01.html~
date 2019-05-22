@@ -1,14 +1,25 @@
 <html>
     <head>
+<<<<<<< HEAD
 	<title>W08: Example 02</title>
     </head>
     <body>
 	<script src="http://threejs.org/build/three.min.js"></script>
+=======
+	<title>W08: Example 01</title>
+    </head>
+    <body>
+	<script src="https://threejs.org/build/three.min.js"></script>
+>>>>>>> 0bddc75219b862288cd9922c54b064c2ee029e7c
 	<!--
 	<script src="https://threejs.org/examples/js/math/Lut.js"></script>
 	-->
 	<script src="Lut.js"></script>
+<<<<<<< HEAD
 	<script src="w08_main_ex02.js"></script>
+=======
+	<script src="w08_main_ex01.js"></script>
+>>>>>>> 0bddc75219b862288cd9922c54b064c2ee029e7c
 	<script>
 	 main();
 	</script>

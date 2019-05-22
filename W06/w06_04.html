@@ -3,72 +3,161 @@
 	<title>W06: Task04</title>
     </head>
     <body>
-	<script src="https://threejs.org/build/three.min.js"></script>
+      <script src="https://threejs.org/build/three.min.js"></script>
+      
+      <script type="x-shader/x-vertex" id="gouraud.vert">
+	varying vec3 point_color;
+	varying vec4 point_position;
+	varying vec3 normal_vector;
+	uniform vec3 light_position;
+	uniform vec3 camera_position;
 	
-	<script type="x-shader/x-vertex" id="shader.vert">
+	float CalculateBeckmann(float m, float cosbeta){
+  	return (exp(-(1.0-(cosbeta*cosbeta))/(m*m*cosbeta*cosbeta))/(4.0*m*m*cosbeta*cosbeta*cosbeta*cosbeta));
+ 	}
+        float CalculateFresnelTerm(float n, float c){
+	float g = sqrt(n*n + c*c - 1.0);
+	float T1 = ((g-c)*(g-c))/((g+c)*(g+c));
+ 	float T2 = 1.0 + ( (c*(g+c)-1.0)*(c*(g+c)-1.0) )/( (c*(g-c)+1.0)*(c*(g-c)+1.0) );
+ 	return 0.5 * T1 * T2;
+ 	}
+	vec3 CookTorranceReflection( vec3 C, vec3 L, vec3 N, vec3 V ){
+	 float ka = 0.4;
+         float kd = 0.6;
+         float ks = 0.8;
+         float n = 50.0;
+         vec3 H = normalize(L + V);
+         float NV = dot(N, V);
+         float NH = dot(N, H);
+         float VH = dot(V, H);
+         float NL = dot(N, L);
+         float D = CalculateBeckmann(0.35, NH);
+         float G = min(1.0, min(2.0*NH*NV/VH, 2.0*NH*NL/VH));
+         float F = CalculateFresnelTerm(20.0, dot(L, H));
+         float dd = max( dot( N, L ), 0.0 );
+         float ds = max(0.0, D*G*F/NV);
+         if ( dd <= 0.0 ) { ds = 0.0; }
+	 float Ia = ka;
+	 float Id = kd * dd;
+	 float Is = ks * ds;
+	 return C * ( Ia + Id + Is );
+        }
+	
+	void main(){
+	     point_position = modelViewMatrix * vec4( position, 1.0 );
+	     normal_vector = normalMatrix * normal;
+	     vec3 C = color;
+	     vec3 L = normalize( light_position - point_position.xyz );
+	     vec3 N = normalize( normal_vector );
+	     vec3 V = normalize( camera_position - point_position.xyz );
+
+	     point_color = CookTorranceReflection( C, L, N, V );
+
+	     gl_Position = projectionMatrix * point_position;
+	 }
+	</script>
+
+	<script type="x-shader/x-fragment" id="gouraud.frag">
 	  varying vec3 point_color;
-	  varying vec4 point_position;
-	  varying vec3 normal_vector;
 	  void main(){
-	      point_color = color;
-	      point_position = modelViewMatrix * vec4( position, 1.0 );
-	      normal_vector = normalMatrix * normal;
-	      gl_Position = projectionMatrix * point_position;
+	     gl_FragColor = vec4( point_color, 1.0 );
 	  }
 	</script>
 	
-	<script type="x-shader/x-fragment" id="shader.frag">
+	<script type="x-shader/x-vertex" id="phong.vert">
+	  varying vec3 point_color;
+	  varying vec4 point_position;
+	  varying vec3 normal_vector;
+	  
+	  void main(){
+	  point_color = color;
+	  point_position = modelViewMatrix * vec4( position, 1.0 );
+	  normal_vector = normalMatrix * normal;
+	  
+	  gl_Position = projectionMatrix * point_position;
+	  }
+	</script>
+	
+	<script type="x-shader/x-fragment" id="phong.frag">
 	  varying vec3 point_color;
 	  varying vec4 point_position;
 	  varying vec3 normal_vector;
 	  uniform vec3 light_position;
 	  uniform vec3 camera_position;
-	  float CalculateBeckmann(float m, float cosbeta){
-  	      return (
-  		  exp(-(1.0-(cosbeta*cosbeta))/(m*m*cosbeta*cosbeta))/(4.0*m*m*cosbeta*cosbeta*cosbeta*cosbeta)
-  	      );
- 	  }
-	  float CalculateFresnelTerm(float n, float c){
-	      float g = sqrt(n*n + c*c - 1.0);
-	      float T1 = ((g-c)*(g-c))/((g+c)*(g+c));
- 	      float T2 = 1.0 + ( (c*(g+c)-1.0)*(c*(g+c)-1.0) )/( (c*(g-c)+1.0)*(c*(g-c)+1.0) );
- 	      return 0.5 * T1 * T2;
- 	  }
-	  vec3 Reflection( vec3 C, vec3 L, vec3 N, vec3 V ){
-	      float ka = 0.3;
-	      float kd = 0.5;
-	      float ks = 0.8;
-	      float n = 50.0;
-	      vec3 H = normalize(L + V);
-	      float NV = dot(N, V);
-    	      float NH = dot(N, H);
-     	      float VH = dot(V, H);
-     	      float NL = dot(N, L);
-	      float D = CalculateBeckmann(0.35, NH);
-	      float G = min(1.0, min(2.0*NH*NV/VH, 2.0*NH*NL/VH));
-	      float F = CalculateFresnelTerm(20.0, dot(L, H));
-	      float dd = max( dot( N, L ), 0.0 );
-	      float ds = max(0.0, D*G*F/NV);
-	      if ( dd <= 0.0 ) { ds = 0.0; }
-	      float Ia = ka;
-	      float Id = kd * dd;
-	      float Is = ks * ds;
-	      return C * ( Ia + Id + Is );
-	  }
-	  void main(){
-	      vec3 C = point_color;
-	      vec3 L = normalize( light_position - point_position.xyz );
-	      vec3 N = normalize( normal_vector );
-	      vec3 V = normalize( camera_position - point_position.xyz );
-	      vec3 shaded_color = Reflection( C, L, N, V );
-	      
-	      gl_FragColor = vec4( shaded_color, 1.0 );
-	  }
+	  
+       float CalculateBeckmann(float m, float cosbeta){
+  	 return (exp(-(1.0-(cosbeta*cosbeta))/(m*m*cosbeta*cosbeta))/(4.0*m*m*cosbeta*cosbeta*cosbeta*cosbeta));
+ 	}
+        float CalculateFresnelTerm(float n, float c){
+	 float g = sqrt(n*n + c*c - 1.0);
+	 float T1 = ((g-c)*(g-c))/((g+c)*(g+c));
+ 	 float T2 = 1.0 + ( (c*(g+c)-1.0)*(c*(g+c)-1.0) )/( (c*(g-c)+1.0)*(c*(g-c)+1.0) );
+ 	 return 0.5 * T1 * T2;
+ 	}
+	vec3 CookTorranceReflection( vec3 C, vec3 L, vec3 N, vec3 V ){
+	 float ka = 0.4;
+         float kd = 0.6;
+         float ks = 0.8;
+         float n = 50.0;
+         vec3 H = normalize(L + V);
+         float NV = dot(N, V);
+         float NH = dot(N, H);
+         float VH = dot(V, H);
+         float NL = dot(N, L);
+         float D = CalculateBeckmann(0.35, NH);
+         float G = min(1.0, min(2.0*NH*NV/VH, 2.0*NH*NL/VH));
+         float F = CalculateFresnelTerm(20.0, dot(L, H));
+         float dd = max( dot( N, L ), 0.0 );
+         float ds = max(0.0, D*G*F/NV);
+         if ( dd <= 0.0 ) { ds = 0.0; }
+	 float Ia = ka;
+	 float Id = kd * dd;
+	 float Is = ks * ds;
+	 return C * ( Ia + Id + Is );
+        }
+
+	    
+	 void main(){
+	     vec3 C = point_color;
+	     vec3 L = normalize( light_position - point_position.xyz );
+	     vec3 N = normalize( normal_vector );
+	     vec3 V = normalize( camera_position - point_position.xyz );
+
+	     vec3 shaded_color = CookTorranceReflection( C, L, N, V );
+	    
+	     gl_FragColor = vec4( shaded_color, 1.0 );
+	 }
 	</script>
+	<script src="main.js"></script>
 	
-	<script src="main004.js"></script>
-	<script>
-	  main();
-	</script>
+	<div style="width:1200px;">
+	  <div>	    
+	    <div style="width:20%; float:left; margin-bottom: 5px;"><label style="font-family:Arial;"><font size="3">gouraud</font></label></div>
+	    <div style="width:20%; float:left; margin-bottom: 5px;"><label style="font-family:Arial;"><font size="3">phong</font></label></div>
+	  </div>
+	  <br>
+	  <div>	    
+	    <div id="display1" style="width:20%; float:left; margin-bottom: 5px;"></div>
+	    <div id="display2" style="width:20%; float:left; margin-bottom: 5px;"></div>
+	  </div>
+	</div>
+	  
+	  <script>
+	    var vert_shader = document.getElementById('gouraud.vert').text;
+	    var frag_shader = document.getElementById('gouraud.frag').text;
+	    var reflection_model = "CookTorrance";
+	    var target_dom = document.getElementById('display1');
+	    main( vert_shader, frag_shader, reflection_model, target_dom );
+	  </script>
+	  
+	  <script>
+	    var vert_shader = document.getElementById('phong.vert').text;
+	    var frag_shader = document.getElementById('phong.frag').text;
+	    var reflection_model = "CookTorrance";
+	    var target_dom = document.getElementById('display2');
+	    main( vert_shader, frag_shader, reflection_model, target_dom );
+	  </script>
+	  
+
     </body>
 </html>
